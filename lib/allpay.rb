@@ -48,7 +48,13 @@ module Allpay
         response = e
       end
 
-      return result
+      [result["RtnCode"].to_i, result]
+    end
+
+    def get_vaccount_callback(xmldata)
+      has_key?
+      result = parse_xml(decrypt_data(@key, @iv, xmldata))
+      [result["RtnCode"].to_i, result]
     end
 
 
@@ -73,6 +79,13 @@ module Allpay
       cipher.iv = iv
 
       Base64.encode64(cipher.update(data) + cipher.final).gsub("\n","")
+    end
+
+    def decrypt_data(key, iv, data)
+      cipher = OpenSSL::Cipher::AES128.new(:CBC).decrypt
+      cipher.key = key
+      cipher.iv = iv
+      cipher.update(Base64.decode64(data.gsub(" ","+"))) + cipher.final
     end
 
     def parse_xml(data)
