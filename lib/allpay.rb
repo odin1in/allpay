@@ -31,7 +31,7 @@ module Allpay
 
     def get_vaccount(options = {})
       has_key?
-      enc_data = encrypt_data(@key, @iv, {
+      enc_data = Client.encrypt_data(@key, @iv, {
         'MerchantID' => merchant_id,
         'MerchantTradeNo' => options[:merchant_trade_no] ||  SecureRandom.hex(10),
         'MerchantTradeDate' => options[:merchant_trade_date] || Time.now.strftime('%Y/%m/%d %H:%M:%S'),
@@ -43,7 +43,7 @@ module Allpay
       })
 
       begin
-        result = parse_xml(get('/payment/Srv/gateway', {"MerchantID" => merchant_id, "PaymentType" => "vAccount", "XMLData" => enc_data}))
+        result = Client.parse_xml(get('/payment/Srv/gateway', {"MerchantID" => merchant_id, "PaymentType" => "vAccount", "XMLData" => enc_data}))
       rescue => e
         response = e
       end
@@ -53,18 +53,18 @@ module Allpay
 
     def get_vaccount_callback(xmldata)
       has_key?
-      result = decrypt_data(@key, @iv, xmldata)
+      result = Client.decrypt_data(@key, @iv, xmldata)
       [result["RtnCode"].to_i, result]
     end
 
-    def decrypt_data(key, iv, data)
+    def self.decrypt_data(key, iv, data)
       cipher = OpenSSL::Cipher::AES128.new(:CBC).decrypt
       cipher.key = key
       cipher.iv = iv
-      parse_xml(cipher.update(Base64.decode64(data.gsub(" ","+"))) + cipher.final)
+      Client.parse_xml(cipher.update(Base64.decode64(data.gsub(" ","+"))) + cipher.final)
     end
 
-    def encrypt_data(key, iv, data)
+    def self.encrypt_data(key, iv, data)
       data = Gyoku.xml({"Root" => { "Data" => data}})
       cipher = OpenSSL::Cipher::AES128.new(:CBC).encrypt
       cipher.key = key
@@ -73,6 +73,9 @@ module Allpay
       Base64.encode64(cipher.update(data) + cipher.final).gsub("\n","")
     end
 
+    def self.parse_xml(data)
+      Nori.new.parse(data)["Root"]["Data"]
+    end
     private
 
     def has_key?
@@ -87,12 +90,5 @@ module Allpay
       open("http://#{api}/#{path}?#{uri.query}").read
     end
 
-
-
-
-
-    def parse_xml(data)
-      Nori.new.parse(data)["Root"]["Data"]
-    end
   end
 end
