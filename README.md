@@ -30,7 +30,7 @@ allpay = Allpay::Client.new(merchant_id: "YOUR MERCHANT ID", key: 'YOUR KEY For 
 ```
 
 **All in one**
-```ruby
+Not Yet
 
 ### Usage
 
