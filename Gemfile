@@ -4,8 +4,6 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem "rest-client"
-
 gem 'nori', '~> 2.4.0'
 
 gem 'gyoku', '~> 1.0'

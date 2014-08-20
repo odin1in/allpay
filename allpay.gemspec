@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Allpay::VERSION
   spec.authors       = ["odin1in"]
   spec.email         = ["odin@pwn.so"]
-  spec.summary       = %q{Write a short summary. Required.}
-  spec.description   = %q{Write a longer description. Optional.}
+  spec.summary       = %q{Allpay API}
+  spec.description   = %q{Allpay vAccount API}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -20,4 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.6"
   spec.add_development_dependency "rake"
+  spec.add_runtime_dependency 'nori', '~> 2.4.0'
+  spec.add_runtime_dependency 'gyoku', '~> 1.0'
+  spec.add_runtime_dependency 'addressable', '~> 2.3.6'
 end
