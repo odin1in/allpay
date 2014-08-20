@@ -35,7 +35,7 @@ module Allpay
         'MerchantID' => merchant_id,
         'MerchantTradeNo' => options[:merchant_trade_no] ||  SecureRandom.hex(10),
         'MerchantTradeDate' => options[:merchant_trade_date] || Time.now.strftime('%Y/%m/%d %H:%M:%S'),
-        'TradeAmount' => options[:trade_amount] || 10000,
+        'TradeAmount' => options[:trade_amount] || 0,
         'ExpireDate' => options[:expire_date] || '7',
         'BankName' => options[:bank_name] || "CHINATRUST",
         'ReplyURL' => options[:reply_url] || "",
