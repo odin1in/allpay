@@ -53,10 +53,25 @@ module Allpay
 
     def get_vaccount_callback(xmldata)
       has_key?
-      result = parse_xml(decrypt_data(@key, @iv, xmldata))
+      result = decrypt_data(@key, @iv, xmldata)
       [result["RtnCode"].to_i, result]
     end
 
+    def decrypt_data(key, iv, data)
+      cipher = OpenSSL::Cipher::AES128.new(:CBC).decrypt
+      cipher.key = key
+      cipher.iv = iv
+      parse_xml(cipher.update(Base64.decode64(data.gsub(" ","+"))) + cipher.final)
+    end
+
+    def encrypt_data(key, iv, data)
+      data = Gyoku.xml({"Root" => { "Data" => data}})
+      cipher = OpenSSL::Cipher::AES128.new(:CBC).encrypt
+      cipher.key = key
+      cipher.iv = iv
+
+      Base64.encode64(cipher.update(data) + cipher.final).gsub("\n","")
+    end
 
     private
 
@@ -72,21 +87,9 @@ module Allpay
       open("http://#{api}/#{path}?#{uri.query}").read
     end
 
-    def encrypt_data(key, iv, data)
-      data = Gyoku.xml({"Root" => { "Data" => data}})
-      cipher = OpenSSL::Cipher::AES128.new(:CBC).encrypt
-      cipher.key = key
-      cipher.iv = iv
 
-      Base64.encode64(cipher.update(data) + cipher.final).gsub("\n","")
-    end
 
-    def decrypt_data(key, iv, data)
-      cipher = OpenSSL::Cipher::AES128.new(:CBC).decrypt
-      cipher.key = key
-      cipher.iv = iv
-      cipher.update(Base64.decode64(data.gsub(" ","+"))) + cipher.final
-    end
+
 
     def parse_xml(data)
       Nori.new.parse(data)["Root"]["Data"]
