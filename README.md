@@ -1,8 +1,10 @@
-# Allpay
+Allpay
+=========
 
 A Gem for the [Allpay](http://www.allpay.com.tw/).
 
-## Installation
+Installation
+=========
 
 Add this line to your application's Gemfile:
 
@@ -16,17 +18,27 @@ Or install it yourself as:
 
     $ gem install allpay
 
-## Usage
+Quick Start
+=========
+
+### Initialize
+
+**vAccount**
 
 ```ruby
-require 'allpay'
-
 allpay = Allpay::Client.new(merchant_id: "YOUR MERCHANT ID", key: 'YOUR KEY For Vaccount', iv: 'YOUR IV For Vaccount')
-
-allpay.get_vaccount(trade_amount: 1000, reply_url: "YOUR Callback URL")
 ```
 
+**All in one**
+```ruby
 
+### Usage
+
+**vAccount**
+
+```ruby
+allpay.get_vaccount(trade_amount: 1000, reply_url: "YOUR Callback URL")
+```
     we also support options below:
     * are required
 
@@ -40,7 +52,8 @@ allpay.get_vaccount(trade_amount: 1000, reply_url: "YOUR Callback URL")
 
 
 
-## Contributing
+Contributing
+=========
 
 1. Fork it ( https://github.com/odin1in/allpay/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
