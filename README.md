@@ -1,6 +1,6 @@
 # Allpay
 
-TODO: Write a gem description
+A Gem for the [Allpay](http://www.allpay.com.tw/).
 
 ## Installation
 
@@ -18,11 +18,16 @@ Or install it yourself as:
 
 ## Usage
 
-    allpay = Allpay::Client.new( merchant_id, key: key_for_vaccount, iv: iv_for_vaccount)
+```ruby
+require 'allpay'
 
-    allpay.get_vaccount(options)
+allpay = Allpay::Client.new(merchant_id: "YOUR MERCHANT ID", key: 'YOUR KEY For Vaccount', iv: 'YOUR IV For Vaccount')
 
-    options below:
+allpay.get_vaccount(trade_amount: 1000, reply_url: "YOUR Callback URL")
+```
+
+
+    we also support options below:
     * are required
 
     merchant_trade_no -- Default is random 20 digits
