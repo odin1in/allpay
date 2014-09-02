@@ -12,21 +12,19 @@ module Allpay
   class Client
     attr_accessor :merchant_id, :rest, :http, :api, :all_key, :all_iv, :key, :iv
 
-    def initialize(merchant_id, options = {})
-      @merchant_id = merchant_id
-      begin
-        env = ENV.try("fetch", "RAILS_ENV")
-      rescue
-        env = "development"
-      end
+    def initialize(options = {})
 
-      if env == 'production'
-        @api = 'pay.allpay.com.tw'
-      else
+      if options[:merchant_id].to_i == 2000132
+        @merchant_id = 2000132
+        @key = "ejCk326UnaZWKisg"
+        @iv = "q9jcZX8Ib9LM8wYk"
         @api = 'pay-stage.allpay.com.tw'
+      else
+        @merchant_id = options[:merchant_id]
+        @key = options[:key]
+        @iv = options[:iv]
+        @api = 'pay.allpay.com.tw'
       end
-      @key = options[:key]
-      @iv = options[:iv]
     end
 
     def get_vaccount(options = {})
