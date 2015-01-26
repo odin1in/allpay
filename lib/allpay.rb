@@ -85,7 +85,7 @@ module Allpay
     def get(path, params = {})
       uri = Addressable::URI.new
       uri.query_values = params
-      open("http://#{api}/#{path}?#{uri.query}").read
+      open("https://#{api}/#{path}?#{uri.query}").read
     end
 
   end
